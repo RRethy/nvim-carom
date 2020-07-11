@@ -8,7 +8,7 @@
 " endif
 " let g:loaded_carom = 1
 
-nnoremap <silent> <leader>q :call AsyncMacro()<CR>
+nnoremap <silent> <leader>q :<C-U>call AsyncMacro()<CR>
 
 fun! AsyncMacro() abort
     set nomodifiable
