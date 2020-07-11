@@ -12,7 +12,7 @@ nnoremap <silent> <leader>q :call AsyncMacro()<CR>
 
 fun! AsyncMacro() abort
     set nomodifiable
-    let reg = input('')
+    let reg = nr2char(getchar())
     wshada
     let tmpname = tempname()
     let fail = writefile(getbufline(bufnr('%'), 1, '$'), tmpname)
