@@ -7,3 +7,4 @@
 * `changelist`
 * `jumplist`
 * Allow a count to be provided
+* Validate provided register
