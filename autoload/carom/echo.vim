@@ -17,7 +17,7 @@ fun! carom#echo#on_invalid_reg(reg) abort
 endfun
 
 fun! carom#echo#on_create_file_err() abort
-    call s:err('Unabled to execute the macro')
+    call s:err('Unabled to execute the macro for bufnr '.bufnr('%'))
 endfun
 
 fun! carom#echo#on_finished(exitcode, reg, bufnr) abort
