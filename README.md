@@ -1,7 +1,6 @@
 # TODO
 
 * Handle buf being deleted
-* Allow a count to be provided
 * `g:Carom_restrictedMode`
 * Finish handling 'shada'
 * `:ArgdoMacro`

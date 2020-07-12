@@ -10,7 +10,7 @@ fun! carom#macro#async(reg) abort
     call jobstart(['nvim',
                 \     '--cmd', 'let g:Carom_restrictedMode = 1',
                 \     '-c', 'call cursor('.line('.').','.col('.').')',
-                \     '-c', 'norm! @'.a:reg,
+                \     '-c', 'norm! '.v:count1.'@'.a:reg,
                 \     '-c', 'wq', tmpname
                 \ ], {
                 \   'on_exit': function('s:on_exit'),
