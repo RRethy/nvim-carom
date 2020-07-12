@@ -16,15 +16,19 @@ fun! carom#macro#async(reg) abort
                 \   'on_exit': function('s:on_exit'),
                 \   'fname': tmpname,
                 \   'bufnr': bufnr('%'),
+                \   'changenr': changenr(),
+                \   'reg': a:reg,
                 \ })
 endfun
 
 fun! s:on_exit(id, exitcode, eventtype) dict abort
+    set modifiable
+    if changenr() != self.changenr
+        " TODO the user dun goofed
+    endif
     let l = line('.')
     let c = col('.')
-    set modifiable
-    " TODO check if the buffer has been changed under our noses
     keepjumps exe '%!cat '.self.fname
     keepjumps call cursor(l, c)
-    echohl MoreMsg | echo 'Done executing the macro' | echohl None
+    call carom#echo#on_finished(0, self.reg, self.bufnr)
 endf

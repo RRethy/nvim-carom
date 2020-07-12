@@ -20,9 +20,9 @@ fun! carom#echo#on_create_file_err() abort
     call s:err('Unabled to execute the macro')
 endfun
 
-fun! carom#echo#on_finished(exitcode, reg, bufname) abort
+fun! carom#echo#on_finished(exitcode, reg, bufnr) abort
     if a:exitcode == 0
-        call s:info(printf('@%s successfully completed on %s', a:reg, a:bufname))
+        call s:info(printf('@%s successfully completed on buffer #%s', a:reg, a:bufnr))
     else
         " TODO print error msg
     endif
