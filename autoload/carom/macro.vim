@@ -17,33 +17,32 @@ fun! carom#macro#async(reg) abort
                 \   'tmpname': tmpname,
                 \   'bufnr': bufnr('%'),
                 \   'buffname': nvim_buf_get_name(bufnr('%')),
-                \   'changenr': changenr(),
+                \   'changetick': nvim_buf_get_changedtick(0),
                 \   'reg': a:reg,
                 \ })
 endfun
 
 fun! s:on_exit(id, exitcode, eventtype) dict abort
+    let @* = self.tmpname
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)
-            " TODO prompt for action
+            echom "TODO: Buffer doesn't exist. File writable."
+            " TODO prompt for next action
             " let action = inputlist([...])
         else
+            echom "TODO: Buffer doesn't exist. File not writable."
             " TODO cannot do anything
         endif
         return
     endif
-    call nvim_buf_set_option(self.bufnr, 'modifiable', 1)
+    call nvim_buf_set_option(self.bufnr, 'modifiable', v:true)
 
-    " TODO:
-    "  check if buffer is in an open window for the cucrent tab
-    "  if it is, then go to that window
-    "  else, :sp and open it
-    if changenr() != self.changenr
+    if self.changetick != nvim_buf_get_changedtick(self.bufnr)
         " TODO the user dun goofed
+        " inputlist for next action
+        return
     endif
-    let l = line('.')
-    let c = col('.')
-    keepjumps exe '%!cat '.self.tmpname
-    keepjumps call cursor(l, c)
+
+    call nvim_buf_set_lines(self.bufnr, 0, -1, 0, readfile(self.tmpname))
     call carom#echo#on_finished(0, self.reg, self.bufnr)
 endf
