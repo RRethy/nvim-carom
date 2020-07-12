@@ -1,6 +1,6 @@
 # TODO
 
-* `:CaromSafeMode`
+* `g:Carom_restrictedMode`
 * Check `'shada'`
 * `:ArgdoMacro`
 * Get cursor position from finished macro execution and maybe save it as a mark

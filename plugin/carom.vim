@@ -10,6 +10,10 @@
 
 nnoremap <silent> <leader>q :<C-U>call AsyncMacro()<CR>
 
+if get(g:, 'CaromSandbox', 0)
+    call carom#restrictedmode()
+endif
+
 fun! AsyncMacro() abort
     set nomodifiable
     let reg = nr2char(getchar())
