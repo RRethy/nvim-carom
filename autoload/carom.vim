@@ -1,7 +1,7 @@
 fun! carom#at() abort
     let reg = nr2char(getchar())
     if !carom#utils#valid_register(reg)
-        call carom#utils#on_invalid_reg(reg)
+        call carom#echo#on_invalid_reg(reg)
         return
     endif
     call carom#macro#async(reg)
@@ -12,7 +12,7 @@ fun! carom#argdo_macro(...) abort
         " TODO query the user for a register
     else
         if !carom#utils#valid_register(a:1)
-            call carom#utils#on_invalid_reg(a:1)
+            call carom#echo#on_invalid_reg(a:1)
             return
         endif
 
