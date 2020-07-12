@@ -16,7 +16,7 @@ fun! carom#macro#async(reg) abort
                 \   'on_exit': function('s:on_exit'),
                 \   'tmpname': tmpname,
                 \   'bufnr': bufnr('%'),
-                \   'buffname': nvim_buf_get_name(bufnr('%')),
+                \   'buffname': nvim_buf_get_name(0),
                 \   'changetick': nvim_buf_get_changedtick(0),
                 \   'reg': a:reg,
                 \ })
@@ -26,12 +26,16 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
     let @* = self.tmpname
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)
-            echom "TODO: Buffer doesn't exist. File writable."
-            " TODO prompt for next action
-            " let action = inputlist([...])
+            let action = inputlist([
+                        \   'bufnr('..self.bufnr..') no longer exists but the file still exists. How would you like to recover?',
+                        \   '1. Overwrite the file with the results of the macro',
+                        \   '2. Discard the results of the macro (press any key)',
+                        \ ])
+            if action == 1
+                exe '!cp -f '..self.tmpname..' '..self.buffname
+            endif
         else
-            echom "TODO: Buffer doesn't exist. File not writable."
-            " TODO cannot do anything
+            call carom#echo#on_file_not_exists(self.buffname)
         endif
         return
     endif

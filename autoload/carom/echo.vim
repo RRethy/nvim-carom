@@ -1,6 +1,6 @@
 fun! s:kecho(hl, msg) abort
     exe 'echohl '.a:hl
-    echo a:msg
+    echo printf('carom.vim: %s', a:msg)
     echohl None
 endfun
 
@@ -25,5 +25,14 @@ fun! carom#echo#on_finished(exitcode, reg, bufnr) abort
         call s:info(printf('@%s successfully completed on buffer #%s', a:reg, a:bufnr))
     else
         " TODO print error msg
+    endif
+endfun
+
+fun! carom#echo#on_file_not_exists(fname) abort
+    if empty(a:fname)
+        " was never a file, only a buffer
+        call s:err('Finished executing a macro on a buffer but this buffer no longer exists...')
+    else
+        call s:err('Buffer being worked on does not exists and file is deleted: '.a:fname)
     endif
 endfun
