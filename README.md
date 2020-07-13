@@ -6,3 +6,5 @@
         * Maybe set the mark C
 * Finish handling 'shada'
 * `:ArgdoMacro`
+* Clean up dup inputlist code
+* De-abstract err message
