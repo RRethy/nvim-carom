@@ -27,7 +27,7 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)
             let action = inputlist([
-                        \   'bufnr('..self.bufnr..') no longer exists but the file still exists. How would you like to recover?',
+                        \   'carom.nvim: bufnr('..self.bufnr..') no longer exists but the file still exists. How would you like to recover?',
                         \   '1. Overwrite the file with the results of the macro',
                         \   '2. Discard the results of the macro (press any key)',
                         \ ])
@@ -42,9 +42,14 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
     call nvim_buf_set_option(self.bufnr, 'modifiable', v:true)
 
     if self.changetick != nvim_buf_get_changedtick(self.bufnr)
-        " TODO the user dun goofed
-        " inputlist for next action
-        return
+        let action = inputlist([
+                    \   'carom.nvim: bufnr('..self.bufnr..') has been modified since the macro was started. How would you like to continue?',
+                    \   '1. Overwrite any changes with the results of the macro',
+                    \   '2. Discard the results of the macro (press any key)',
+                    \ ])
+        if action != 1
+            return
+        endif
     endif
 
     call nvim_buf_set_lines(self.bufnr, 0, -1, 0, readfile(self.tmpname))
