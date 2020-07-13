@@ -5,9 +5,10 @@ fun! carom#macro#async(reg) abort
         call carom#echo#on_create_file_err()
         return
     endif
-    call carom#shada#write()
+    let shadatmpfile = carom#shada#write()
     set nomodifiable
     call jobstart(['nvim',
+                \     '-i', shadatmpfile,
                 \     '--cmd', 'let g:Carom_restrictedMode = 1',
                 \     '-c', 'call cursor('.line('.').','.col('.').')',
                 \     '-c', 'norm! '.v:count1.'@'.a:reg,
