@@ -11,7 +11,6 @@ fun! carom#macro(...) abort
         if !carom#utils#validate_register(a:1)
             return
         endif
-        echom a:000
         call carom#macro#async(bufnr(), a:1, 1)
     else
         if !carom#utils#validate_register(a:1)
