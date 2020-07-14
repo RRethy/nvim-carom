@@ -2,7 +2,7 @@ fun! carom#macro#async(reg) abort
     let tmpname = tempname()
     let fail = writefile(getbufline(bufnr('%'), 1, '$'), tmpname)
     if fail == -1
-        call carom#echo#on_create_file_err()
+        call carom#echo#err('Unable to execute the macro for bufnr('.bufnr().')')
         return
     endif
     let shadatmpfile = carom#shada#write()
@@ -40,8 +40,10 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
             if action == 1
                 exe '!cp -f '..self.tmpname..' '..self.buffname
             endif
+        elseif empty(self.buffname)
+            call carom#echo#err('Finished executing a macro on an unsaved buffer but this buffer no longer exists...')
         else
-            call carom#echo#on_file_not_exists(self.buffname)
+            call carom#echo#err('Buffer being worked on does not exists and file is deleted: '.self.buffname)
         endif
         return
     endif
@@ -59,5 +61,5 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
     endif
 
     call nvim_buf_set_lines(self.bufnr, 0, -1, 0, readfile(self.tmpname))
-    call carom#echo#on_finished(0, self.reg, self.bufnr)
+    call carom#echo#info('macro @'..self.reg..' successfully completed on bufnr('.self.bufnr.')')
 endf
