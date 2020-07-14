@@ -12,6 +12,10 @@ fun! s:info(msg) abort
     call s:kecho('MoreMsg', a:msg)
 endfun
 
+fun! carom#echo#err(msg) abort
+    call s:err(a:msg)
+endfun
+
 fun! carom#echo#on_invalid_reg(reg) abort
     call s:err('Invalid register '.a:reg)
 endfun

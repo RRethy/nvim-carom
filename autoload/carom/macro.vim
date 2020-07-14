@@ -11,8 +11,9 @@ fun! carom#macro#async(reg) abort
                 \     '-i', shadatmpfile,
                 \     '--cmd', 'let g:Carom_restrictedMode = 1',
                 \     '-c', 'call cursor('.line('.').','.col('.').')',
+                \     '-c', 'set filetype='.&ft,
                 \     '-c', 'norm! '.v:count1.'@'.a:reg,
-                \     '-c', 'wq', tmpname
+                \     '-c', 'call carom#restricted#stop(0)', tmpname,
                 \ ], {
                 \   'on_exit': function('s:on_exit'),
                 \   'tmpname': tmpname,
@@ -24,7 +25,11 @@ fun! carom#macro#async(reg) abort
 endfun
 
 fun! s:on_exit(id, exitcode, eventtype) dict abort
-    let @* = self.tmpname
+    if a:exitcode != 0
+        call carom#echo#err('bufnr('..self.bufnr..') failed to execute the macro. Make sure you are not editing other files inside the macro.')
+        return
+    endif
+
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)
             let action = inputlist([
