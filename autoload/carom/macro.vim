@@ -64,4 +64,8 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
 
     call nvim_buf_set_lines(self.bufnr, 0, -1, 0, readfile(self.tmpname))
     call carom#echo#info('macro @'..self.reg..' successfully completed on bufnr('.self.bufnr.')')
+
+    " Not sure why but ":lfdo Macro a" and alikes caused syntax highlighting
+    " to get fucked up. This is a hack to fix that.
+    call nvim_buf_set_option(self.bufnr, 'filetype', nvim_buf_get_option(self.bufnr, 'filetype'))
 endf
