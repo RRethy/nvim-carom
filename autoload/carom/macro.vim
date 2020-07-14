@@ -1,12 +1,12 @@
 fun! carom#macro#async(reg) abort
     let tmpname = tempname()
-    let fail = writefile(getbufline(bufnr('%'), 1, '$'), tmpname)
+    let fail = writefile(getbufline(bufnr(), 1, '$'), tmpname)
     if fail == -1
         call carom#echo#err('Unable to execute the macro for bufnr('.bufnr().')')
         return
     endif
     let shadatmpfile = carom#shada#write()
-    set nomodifiable
+    call nvim_buf_set_option(bufnr(), 'modifiable', v:false)
     call jobstart(['nvim',
                 \     '-i', shadatmpfile,
                 \     '--cmd', 'let g:Carom_restrictedMode = 1',
@@ -29,6 +29,8 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
         call carom#echo#err('bufnr('..self.bufnr..') failed to execute the macro. Make sure you are not editing other files inside the macro.')
         return
     endif
+
+    let @* = self.tmpname
 
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)

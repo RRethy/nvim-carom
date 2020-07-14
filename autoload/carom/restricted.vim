@@ -12,5 +12,6 @@ fun! carom#restricted#start() abort
 endfun
 
 fun! carom#restricted#stop(err) abort
+    write
     exe string(a:err).'cquit'
 endfun
