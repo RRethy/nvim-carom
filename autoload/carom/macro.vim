@@ -1,23 +1,23 @@
-fun! carom#macro#async(reg) abort
+fun! carom#macro#async(bufnr, reg, count) abort
     let tmpname = tempname()
-    let fail = writefile(getbufline(bufnr(), 1, '$'), tmpname)
+    let fail = writefile(getbufline(a:bufnr, 1, '$'), tmpname)
     if fail == -1
-        call carom#echo#err('Unable to execute the macro for bufnr('.bufnr().')')
+        call carom#echo#err('Unable to execute the macro for bufnr('.a:bufnr.')')
         return
     endif
     let shadatmpfile = carom#shada#write()
-    call nvim_buf_set_option(bufnr(), 'modifiable', v:false)
+    call nvim_buf_set_option(a:bufnr, 'modifiable', v:false)
     call jobstart(['nvim',
                 \     '-i', shadatmpfile,
                 \     '--cmd', 'let g:Carom_restrictedMode = 1',
                 \     '-c', 'call cursor('.line('.').','.col('.').')',
                 \     '-c', 'set filetype='.&ft,
-                \     '-c', 'norm! '.v:count1.'@'.a:reg,
+                \     '-c', 'norm! '.a:count.'@'.a:reg,
                 \     '-c', 'call carom#restricted#stop(0)', tmpname,
                 \ ], {
                 \   'on_exit': function('s:on_exit'),
                 \   'tmpname': tmpname,
-                \   'bufnr': bufnr('%'),
+                \   'bufnr': a:bufnr,
                 \   'buffname': nvim_buf_get_name(0),
                 \   'changetick': nvim_buf_get_changedtick(0),
                 \   'reg': a:reg,

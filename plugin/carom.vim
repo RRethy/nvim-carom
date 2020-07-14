@@ -7,7 +7,7 @@
 " let g:loaded_carom = 1
 
 nnoremap <silent> <leader>2 :<C-U>call carom#at()<CR>
-command! -bar -nargs=? ArgdoMacroAsync call carom#argdo_macro(<f-args>)
+command! -nargs=+ Macro call carom#macro(<f-args>)
 
 if get(g:, 'Carom_restrictedMode', 0)
     call carom#restricted#start()
