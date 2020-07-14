@@ -33,7 +33,7 @@ fun! s:on_exit(id, exitcode, eventtype) dict abort
     if !bufexists(self.bufnr)
         if filewritable(self.buffname)
             let action = inputlist([
-                        \   'carom.nvim: bufnr('..self.bufnr..') no longer exists but the file still exists. How would you like to recover?',
+                        \   'carom.nvim: bufnr('..self.bufnr..') no longer exists but the file still exists. How would you like to continue?',
                         \   '1. Overwrite the file with the results of the macro',
                         \   '2. Discard the results of the macro (press any key)',
                         \ ])
